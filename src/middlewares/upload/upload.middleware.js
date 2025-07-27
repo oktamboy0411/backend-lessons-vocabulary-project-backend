@@ -6,7 +6,7 @@ const {
 const { StatusCodes } = require("http-status-codes");
 
 const checkFileType = (file, cb) => {
-  const fileTypes = /jpeg|jpg|png|gif|mp4|avi|mov|m4a/;
+  const fileTypes = /jpeg|jpg|png|gif/;
   const extname = fileTypes.test(path.extname(file.originalname).toLowerCase());
   const mimetype = fileTypes.test(file.mimetype);
   if (extname && mimetype) {
