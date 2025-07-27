@@ -7,6 +7,7 @@ const { connectDB } = require("./utils/configs/config.db.js");
 
 const app = express();
 void connectDB();
+
 app.use(express.json());
 
 app.get("/", (req, res) => {

@@ -43,6 +43,21 @@ class UploadController {
       file_path,
     });
   };
+
+  static deleteFile = async (file_path) => {
+    if (!file_path) {
+      return;
+    }
+    try {
+      await UploadModel.deleteOne({ file_path });
+      await deleteFileFromS3(file_path);
+    } catch (error) {
+      throw new HttpException(
+        StatusCodes.INTERNAL_SERVER_ERROR,
+        "Failed to delete file"
+      );
+    }
+  };
 }
 
 module.exports = { UploadController };
