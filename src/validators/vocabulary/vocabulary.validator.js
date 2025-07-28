@@ -1,4 +1,4 @@
-const { body, query } = require("express-validator");
+const { body, query, param } = require("express-validator");
 const { VocabularyTypes } = require("../../utils/constants/constants");
 
 class VocabularyValidator {
@@ -24,6 +24,26 @@ class VocabularyValidator {
     )
       .optional()
       .isIn([VocabularyTypes.MODERN, VocabularyTypes.HISTORY]),
+  ];
+
+  static delete = () => [
+    param("id", "ID must be provided.").isEmpty(),
+    param("id", "ID must be a valid MongoDB ObjectId.").isMongoId(),
+  ];
+
+  static update = () => [
+    param("id", "ID must be provided.").isEmpty(),
+    param("id", "ID must be a valid MongoDB ObjectId.").isMongoId(),
+    body("name", "Name must be a string.").optional().isString(),
+    body(
+      "type",
+      "Type must be one of the following: " +
+        Object.values(VocabularyTypes).join(", ")
+    )
+      .optional()
+      .isIn([VocabularyTypes.MODERN, VocabularyTypes.HISTORY]),
+    body("description", "Description must be a string.").optional().isString(),
+    body("image", "Image must be a string.").optional().isURL(),
   ];
 }
 

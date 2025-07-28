@@ -23,4 +23,18 @@ VocabularyRouter.get(
   VocabularyController.getAll
 );
 
+VocabularyRouter.delete(
+  "/delete/:id",
+  VocabularyValidator.delete(),
+  expressValidatorMiddleware,
+  VocabularyController.delete
+);
+
+VocabularyRouter.put(
+  "/update/:id",
+  VocabularyValidator.update(),
+  expressValidatorMiddleware,
+  VocabularyController.update
+);
+
 module.exports = { VocabularyRouter };

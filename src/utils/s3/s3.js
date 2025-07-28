@@ -17,13 +17,14 @@ const customS3Client = new S3Client({
   },
 });
 
-const uploadFileToS3 = async (key, buffer) => {
+const uploadFileToS3 = async (key, buffer, mimetype) => {
   const upload = new Upload({
     client: customS3Client,
     params: {
       Bucket: AWS_BUCKET_NAME,
       Key: key,
       Body: buffer,
+      ContentType: mimetype,
     },
   });
 
@@ -31,14 +32,14 @@ const uploadFileToS3 = async (key, buffer) => {
     await upload.done();
     return `${AWS_URL}/${AWS_BUCKET_NAME}/${key}`;
   } catch (error) {
-    console.log(`Error uploading file to S3: ${error.message}`);
+    console.log("Error uploading file to S3:", error);
     return null;
   }
 };
 
 const deleteFileFromS3 = async (location) => {
   try {
-    const key = location.split("s3.twcstorage.ru/")[1];
+    const key = location.replace(`${AWS_URL}/${AWS_BUCKET_NAME}/`, "");
     const command = new DeleteObjectCommand({
       Bucket: AWS_BUCKET_NAME,
       Key: key,
@@ -46,7 +47,7 @@ const deleteFileFromS3 = async (location) => {
     await customS3Client.send(command);
     return true;
   } catch (error) {
-    console.log(`Error deleting file from S3: ${error.message}`);
+    console.error("Error deleting file from S3:", error);
   }
   return false;
 };

@@ -77,5 +77,91 @@ class VocabularyController {
       data: vocabularies,
     });
   };
+
+  static delete = async (req, res) => {
+    const { id } = req.params;
+
+    const vocabularyDelete = await VocabularyModel.findById(id);
+    if (!vocabularyDelete) {
+      throw new HttpException(StatusCodes.NOT_FOUND, "Vocabulary not found.");
+    }
+    await vocabularyDelete.deleteOne();
+
+    if (vocabularyDelete.image) {
+      await UploadModel.updateOne(
+        { file_path: vocabularyDelete.image },
+        { $set: { is_use: false, where_used: "" } }
+      );
+    }
+
+    res.status(StatusCodes.OK).json({
+      success: true,
+      message: "Vocabulary deleted successfully.",
+    });
+  };
+
+  static update = async (req, res) => {
+    const { id } = req.params;
+    const { type, name, description, image } = req.body;
+
+    const vocabularyUpdate = await VocabularyModel.findById(id);
+    if (!vocabularyUpdate) {
+      throw new HttpException(StatusCodes.NOT_FOUND, "Vocabulary not found.");
+    }
+
+    const updateObject = {};
+
+    if (type && type !== vocabularyUpdate.type) {
+      updateObject.type = type;
+    }
+
+    if (name && name !== vocabularyUpdate.name) {
+      const existingName = await VocabularyModel.findOne({ name });
+      if (existingName) {
+        throw new HttpException(
+          StatusCodes.BAD_REQUEST,
+          "Vocabulary with this name already exists."
+        );
+      }
+      updateObject.name = name;
+    }
+
+    if (description && description !== vocabularyUpdate.description) {
+      updateObject.description = description;
+    }
+
+    if (image && image !== vocabularyUpdate.image) {
+      const savedImage = await UploadModel.findOne({ file_path: image });
+      if (!savedImage) {
+        throw new HttpException(StatusCodes.BAD_REQUEST, "Image not found.");
+      }
+
+      if (savedImage.is_use) {
+        throw new HttpException(
+          StatusCodes.BAD_REQUEST,
+          "Image is already in use: " + savedImage.where_used
+        );
+      }
+      updateObject.image = image;
+    }
+
+    await VocabularyModel.findByIdAndUpdate(id, updateObject);
+
+    res.status(StatusCodes.OK).json({
+      success: true,
+      message: "Vocabulary updated successfully.",
+    });
+
+    if (image && image !== vocabularyUpdate.image) {
+      await UploadModel.updateOne(
+        { file_path: image },
+        { $set: { is_use: true, where_used: CollectionConstants.VOCABULARY } }
+      );
+      await UploadModel.updateOne(
+        { file_path: vocabularyUpdate.image },
+        { $set: { is_use: false, where_used: "" } }
+      );
+    }
+  };
 }
 module.exports = { VocabularyController };
