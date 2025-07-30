@@ -87,17 +87,17 @@ class VocabularyController {
     }
     await vocabularyDelete.deleteOne();
 
+    res.status(StatusCodes.OK).json({
+      success: true,
+      message: "Vocabulary deleted successfully.",
+    });
+
     if (vocabularyDelete.image) {
       await UploadModel.updateOne(
         { file_path: vocabularyDelete.image },
         { $set: { is_use: false, where_used: "" } }
       );
     }
-
-    res.status(StatusCodes.OK).json({
-      success: true,
-      message: "Vocabulary deleted successfully.",
-    });
   };
 
   static update = async (req, res) => {

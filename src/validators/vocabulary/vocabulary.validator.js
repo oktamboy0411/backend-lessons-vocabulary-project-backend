@@ -27,12 +27,10 @@ class VocabularyValidator {
   ];
 
   static delete = () => [
-    param("id", "ID must be provided.").isEmpty(),
     param("id", "ID must be a valid MongoDB ObjectId.").isMongoId(),
   ];
 
   static update = () => [
-    param("id", "ID must be provided.").isEmpty(),
     param("id", "ID must be a valid MongoDB ObjectId.").isMongoId(),
     body("name", "Name must be a string.").optional().isString(),
     body(
