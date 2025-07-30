@@ -57,7 +57,7 @@ class VocabularyController {
   static getAll = async (req, res) => {
     const { search, type } = req.query;
 
-    let searchQuery = {};
+    const searchQuery = {};
 
     if (type) {
       searchQuery.type = type;
