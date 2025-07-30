@@ -1,9 +1,12 @@
 const express = require("express");
 const { StatusCodes } = require("http-status-codes");
+
 const { PORT } = require("./utils/secrets/secrets.js");
 const { errorMiddleware } = require("./middlewares/error/error.middleware.js");
 const { all_routers } = require("./routes/index.js");
 const { connectDB } = require("./utils/configs/config.db.js");
+
+require("./utils/cron.job/cron.job.js");
 
 const app = express();
 void connectDB();

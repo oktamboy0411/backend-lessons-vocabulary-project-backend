@@ -48,18 +48,25 @@ class UploadController {
     });
   };
 
-  static deleteFile = async (file_path) => {
-    if (!file_path) {
-      return;
-    }
+  static deleteFilesWithCron = async () => {
     try {
-      await UploadModel.deleteOne({ file_path });
-      await deleteFileFromS3(file_path);
-    } catch (error) {
-      throw new HttpException(
-        StatusCodes.INTERNAL_SERVER_ERROR,
-        "Failed to delete file"
+      const oneDayAgo = new Date(Date.now() - 24 * 60 * 60 * 1000);
+      const uploads = await UploadModel.find(
+        {
+          uploaded_at: { $lt: oneDayAgo },
+          is_use: false,
+        },
+        null,
+        { lean: true }
       );
+      for (const upload of uploads) {
+        await UploadModel.deleteOne({ _id: upload._id });
+        await deleteFileFromS3(upload.file_path);
+      }
+      return uploads.length.toString();
+    } catch (error) {
+      console.log("Error deleting old files:", error);
+      return "0";
     }
   };
 }
