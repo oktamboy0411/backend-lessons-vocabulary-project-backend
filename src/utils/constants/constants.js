@@ -2,6 +2,8 @@ class CollectionConstants {
   static VOCABULARY = "vocabulary";
   static SECTION = "section";
   static UPLOAD = "upload";
+  static CATEGORY = "category";
+  static WORD = "word";
 }
 
 class VocabularyTypes {
