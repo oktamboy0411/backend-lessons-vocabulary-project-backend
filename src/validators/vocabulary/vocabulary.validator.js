@@ -24,10 +24,10 @@ class VocabularyValidator {
     )
       .optional()
       .isIn([VocabularyTypes.MODERN, VocabularyTypes.HISTORY]),
-    query("page", "Page must be a positive number.")
+    query("page", "Page must be a positive integer.")
       .optional()
       .isInt({ min: 1 }),
-    query("limit", "Limit must be a positive number.")
+    query("limit", "Limit must be a positive integer.")
       .optional()
       .isInt({ min: 1 }),
   ];

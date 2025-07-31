@@ -57,7 +57,7 @@ class SectionController {
   };
 
   static getAll = async (req, res) => {
-    const { search, vocabulary } = req.query;
+    const { search, vocabulary, page, limit } = req.query;
 
     const searchQuery = {};
 
@@ -69,14 +69,23 @@ class SectionController {
       searchQuery.$or = [{ name: { $regex: search.trim(), $options: "i" } }];
     }
 
-    const sections = await SectionModel.find(searchQuery).populate(
-      "vocabulary",
-      ["name", "type"]
-    );
+    const sections = await SectionModel.find(searchQuery)
+      .populate("vocabulary", ["name", "type"])
+      .skip((page - 1) * limit)
+      .limit(limit);
+
+    const total = await SectionModel.countDocuments(searchQuery);
 
     res.status(StatusCodes.OK).json({
       success: true,
       data: sections,
+      pagination: {
+        page: Number(page),
+        limit: Number(limit),
+        totalPage: Math.ceil(total / limit),
+        hasNextPage: (page - 1) * limit + sections.length < total,
+        hasPrevPage: page > 1,
+      },
     });
   };
 

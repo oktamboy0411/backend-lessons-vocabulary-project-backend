@@ -18,6 +18,12 @@ class SectionValidator {
     query("vocabulary", "Vocabulary ID must be a valid MongoDB ObjectId.")
       .optional()
       .isMongoId(),
+    query("page", "Page must be a positive integer.")
+      .optional()
+      .isInt({ min: 1 }),
+    query("limit", "Limit must be a positive integer.")
+      .optional()
+      .isInt({ min: 1 }),
   ];
 
   static delete = () => [
