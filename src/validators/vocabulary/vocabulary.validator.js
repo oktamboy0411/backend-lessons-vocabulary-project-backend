@@ -24,6 +24,12 @@ class VocabularyValidator {
     )
       .optional()
       .isIn([VocabularyTypes.MODERN, VocabularyTypes.HISTORY]),
+    query("page", "Page must be a positive number.")
+      .optional()
+      .isInt({ min: 1 }),
+    query("limit", "Limit must be a positive number.")
+      .optional()
+      .isInt({ min: 1 }),
   ];
 
   static delete = () => [

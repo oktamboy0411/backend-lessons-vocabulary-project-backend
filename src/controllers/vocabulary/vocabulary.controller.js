@@ -55,7 +55,7 @@ class VocabularyController {
   };
 
   static getAll = async (req, res) => {
-    const { search, type } = req.query;
+    const { search, type, page, limit } = req.query;
 
     const searchQuery = {};
 
@@ -70,11 +70,22 @@ class VocabularyController {
       ];
     }
 
-    const vocabularies = await VocabularyModel.find(searchQuery);
+    const vocabularies = await VocabularyModel.find(searchQuery)
+      .skip((page - 1) * limit)
+      .limit(limit);
+
+    const total = await VocabularyModel.countDocuments(searchQuery);
 
     res.status(StatusCodes.OK).json({
       success: true,
       data: vocabularies,
+      pagination: {
+        page: Number(page),
+        limit: Number(limit),
+        totalPage: Math.ceil(total / limit),
+        hasNextPage: (page - 1) * limit + vocabularies.length < total,
+        hasPrevPage: page > 1,
+      },
     });
   };
 
