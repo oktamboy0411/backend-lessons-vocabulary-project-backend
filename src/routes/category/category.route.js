@@ -16,4 +16,25 @@ CategoryRouter.post(
   CategoryController.create
 );
 
+CategoryRouter.get(
+  "/get-all",
+  CategoryValidator.getAll(),
+  expressValidatorMiddleware,
+  CategoryController.getAll
+);
+
+CategoryRouter.delete(
+  "/delete/:id",
+  CategoryValidator.delete(),
+  expressValidatorMiddleware,
+  CategoryController.delete
+);
+
+CategoryRouter.put(
+  "/update/:id",
+  CategoryValidator.update(),
+  expressValidatorMiddleware,
+  CategoryController.update
+);
+
 module.exports = { CategoryRouter };

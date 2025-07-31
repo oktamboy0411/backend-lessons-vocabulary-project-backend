@@ -9,6 +9,31 @@ class CategoryValidator {
     body("vocabulary", "Vocabulary is required.").notEmpty(),
     body("vocabulary", "Vocabulary must be a valid Mongo ID.").isMongoId(),
   ];
+
+  static getAll = () => [
+    query("search", "Search must be a string.").optional().isString(),
+    query("vocabulary", "Vocabulary ID must be a valid MongoDB ObjectId.")
+      .optional()
+      .isMongoId(),
+    query("section", "Section ID must be a valid MongoDB ObjectId.")
+      .optional()
+      .isMongoId(),
+    query("page", "Page must be a positive integer.")
+      .optional()
+      .isInt({ min: 1 }),
+    query("limit", "Limit must be a positive integer.")
+      .optional()
+      .isInt({ min: 1 }),
+  ];
+
+  static delete = () => [
+    param("id", "Category ID must be a valid MongoDB ObjectId.").isMongoId(),
+  ];
+
+  static update = () => [
+    param("id", "Category ID must be a valid MongoDB ObjectId.").isMongoId(),
+    body("name", "Name must be a string.").optional().isString(),
+  ];
 }
 
 module.exports = { CategoryValidator };
