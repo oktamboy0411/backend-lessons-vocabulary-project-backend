@@ -33,6 +33,21 @@ class WordValidator {
       .optional()
       .isInt({ min: 1 }),
   ];
+
+  static getOne = () => [
+    param("id", "ID must be a valid MongoDB ObjectId.").isMongoId(),
+  ];
+
+  static delete = () => [
+    param("id", "ID must be a valid MongoDB ObjectId.").isMongoId(),
+  ];
+
+  static update = () => [
+    param("id", "ID must be a valid MongoDB ObjectId.").isMongoId(),
+    body("name", "Name must be a string.").optional().isString(),
+    body("description", "Description must be a string.").optional().isString(),
+    body("image", "Image must be a string.").optional().isURL(),
+  ];
 }
 
 module.exports = { WordValidator };

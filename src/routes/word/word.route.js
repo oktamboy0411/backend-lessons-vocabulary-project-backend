@@ -19,4 +19,25 @@ WordRouter.get(
   WordController.getAll
 );
 
+WordRouter.get(
+  "/get/:id",
+  WordValidator.getOne(),
+  expressValidatorMiddleware,
+  WordController.getOne
+);
+
+WordRouter.delete(
+  "/delete/:id",
+  WordValidator.delete(),
+  expressValidatorMiddleware,
+  WordController.delete
+);
+
+WordRouter.put(
+  "/update/:id",
+  WordValidator.update(),
+  expressValidatorMiddleware,
+  WordController.update
+);
+
 module.exports = { WordRouter };

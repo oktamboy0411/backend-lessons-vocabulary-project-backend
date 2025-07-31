@@ -130,6 +130,107 @@ class WordController {
       },
     });
   };
+
+  static getOne = async (req, res) => {
+    const { id } = req.params;
+    const word = await WordModel.findById(id).populate([
+      { path: "vocabulary", select: "name type" },
+      { path: "section", select: "name" },
+      { path: "category", select: "name" },
+    ]);
+
+    if (!word) {
+      throw new HttpException(StatusCodes.NOT_FOUND, "Word not found!");
+    }
+
+    res.status(StatusCodes.OK).json({ success: true, data: word });
+  };
+
+  static delete = async (req, res) => {
+    const { id } = req.params;
+
+    const word = await WordModel.findById(id);
+    if (!word) {
+      throw new HttpException(StatusCodes.NOT_FOUND, "Word not found.");
+    }
+
+    await word.deleteOne();
+
+    res.status(StatusCodes.OK).json({
+      success: true,
+      message: "Word deleted successfully.",
+    });
+
+    if (word.image) {
+      await UploadModel.updateOne(
+        { file_path: word.image },
+        { $set: { is_use: false, where_used: "" } }
+      );
+    }
+  };
+
+  static update = async (req, res) => {
+    const { id } = req.params;
+    const { name, description, image } = req.body;
+
+    const wordUpdate = await WordModel.findById(id);
+    if (!wordUpdate) {
+      throw new HttpException(StatusCodes.NOT_FOUND, "Word not found.");
+    }
+
+    const updateObject = {};
+
+    if (name && name !== wordUpdate.name) {
+      const existingName = await WordModel.findOne({
+        name,
+        category: wordUpdate.category,
+      });
+      if (existingName) {
+        throw new HttpException(
+          StatusCodes.BAD_REQUEST,
+          "Word with this name already exists in category"
+        );
+      }
+      updateObject.name = name;
+    }
+
+    if (description && description !== wordUpdate.description) {
+      updateObject.description = description;
+    }
+
+    if (image && image !== wordUpdate.image) {
+      const savedImage = await UploadModel.findOne({ file_path: image });
+      if (!savedImage) {
+        throw new HttpException(StatusCodes.BAD_REQUEST, "Image not found.");
+      }
+
+      if (savedImage.is_use) {
+        throw new HttpException(
+          StatusCodes.BAD_REQUEST,
+          "Image is already in use: " + savedImage.where_used
+        );
+      }
+      updateObject.image = image;
+    }
+
+    await WordModel.findByIdAndUpdate(id, updateObject);
+
+    res.status(StatusCodes.OK).json({
+      success: true,
+      message: "Word updated successfully.",
+    });
+
+    if (image && image !== wordUpdate.image) {
+      await UploadModel.updateOne(
+        { file_path: image },
+        { $set: { is_use: true, where_used: CollectionConstants.WORD } }
+      );
+      await UploadModel.updateOne(
+        { file_path: wordUpdate.image },
+        { $set: { is_use: false, where_used: "" } }
+      );
+    }
+  };
 }
 
 module.exports = { WordController };
