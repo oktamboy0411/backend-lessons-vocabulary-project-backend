@@ -6,11 +6,13 @@ const { expressValidatorMiddleware } = require("../../validators/index.js");
 const {
   SectionValidator,
 } = require("../../validators/section/section.validator.js");
+const { authMiddleware } = require("../../middlewares/auth/auth.middleware.js");
 
 const SectionRouter = Router();
 
 SectionRouter.post(
   "/create",
+  authMiddleware,
   SectionValidator.create(),
   expressValidatorMiddleware,
   SectionController.create
@@ -25,6 +27,7 @@ SectionRouter.get(
 
 SectionRouter.delete(
   "/delete/:id",
+  authMiddleware,
   SectionValidator.delete(),
   expressValidatorMiddleware,
   SectionController.delete
@@ -32,6 +35,7 @@ SectionRouter.delete(
 
 SectionRouter.put(
   "/update/:id",
+  authMiddleware,
   SectionValidator.update(),
   expressValidatorMiddleware,
   SectionController.update

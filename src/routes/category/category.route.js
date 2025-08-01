@@ -6,11 +6,13 @@ const {
 const {
   CategoryValidator,
 } = require("../../validators/category/category.validator.js");
+const { authMiddleware } = require("../../middlewares/auth/auth.middleware.js");
 
 const CategoryRouter = Router();
 
 CategoryRouter.post(
   "/create",
+  authMiddleware,
   CategoryValidator.create(),
   expressValidatorMiddleware,
   CategoryController.create
@@ -25,6 +27,7 @@ CategoryRouter.get(
 
 CategoryRouter.delete(
   "/delete/:id",
+  authMiddleware,
   CategoryValidator.delete(),
   expressValidatorMiddleware,
   CategoryController.delete
@@ -32,6 +35,7 @@ CategoryRouter.delete(
 
 CategoryRouter.put(
   "/update/:id",
+  authMiddleware,
   CategoryValidator.update(),
   expressValidatorMiddleware,
   CategoryController.update

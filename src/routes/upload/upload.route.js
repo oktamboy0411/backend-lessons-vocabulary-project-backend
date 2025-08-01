@@ -5,11 +5,13 @@ const {
 const {
   uploadFileWithMulter,
 } = require("../../middlewares/upload/upload.middleware.js");
+const { authMiddleware } = require("../../middlewares/auth/auth.middleware.js");
 
 const uploadRouter = Router();
 
 uploadRouter.post(
   "/",
+  authMiddleware,
   uploadFileWithMulter.single("file"),
   UploadController.uploadFile
 );
