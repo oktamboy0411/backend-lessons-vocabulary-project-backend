@@ -1,3 +1,4 @@
+const { AdminRouter } = require("./admin/admin.route.js");
 const { CategoryRouter } = require("./category/category.route.js");
 const { SectionRouter } = require("./section/section.route.js");
 const { uploadRouter } = require("./upload/upload.route.js");
@@ -10,6 +11,7 @@ const all_routers = [
   { path: "/section", router: SectionRouter },
   { path: "/category", router: CategoryRouter },
   { path: "/word", router: WordRouter },
+  { path: "/admin", router: AdminRouter },
 ];
 
 module.exports = { all_routers };

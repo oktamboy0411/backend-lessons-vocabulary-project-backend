@@ -4,6 +4,7 @@ class CollectionConstants {
   static UPLOAD = "upload";
   static CATEGORY = "category";
   static WORD = "word";
+  static ADMIN = "admin";
 }
 
 class VocabularyTypes {
@@ -11,7 +12,14 @@ class VocabularyTypes {
   static HISTORY = "history";
 }
 
+class RoleConstants {
+  static CEO = "CEO";
+  static ADMIN = "admin";
+  static USER = "user";
+}
+
 module.exports = {
   CollectionConstants,
   VocabularyTypes,
+  RoleConstants,
 };

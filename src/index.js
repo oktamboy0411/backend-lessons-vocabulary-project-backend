@@ -1,5 +1,6 @@
 const express = require("express");
 const { StatusCodes } = require("http-status-codes");
+const cors = require("cors");
 
 const { PORT } = require("./utils/secrets/secrets.js");
 const { errorMiddleware } = require("./middlewares/error/error.middleware.js");
@@ -12,6 +13,7 @@ const app = express();
 void connectDB();
 
 app.use(express.json());
+app.use(cors({ origin: "*" }));
 
 app.get("/", (req, res) => {
   res.status(StatusCodes.OK).send("Welcome to the Vocabulary Project Backend!");
