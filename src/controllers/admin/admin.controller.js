@@ -62,6 +62,17 @@ class AdminController {
 
     res.status(StatusCodes.OK).json({ success: true, token });
   };
+
+  static getProfile = async (req, res) => {
+    const { admin_id } = req.admin;
+    const admin = await AdminModel.findById(admin_id).select("-password");
+
+    if (!admin) {
+      throw new HttpException(StatusCodes.NOT_FOUND, "Admin not found!");
+    }
+
+    res.status(StatusCodes.OK).json({ success: true, data: admin });
+  };
 }
 
 module.exports = { AdminController };
