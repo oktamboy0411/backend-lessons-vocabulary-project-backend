@@ -28,6 +28,13 @@ VocabularyRouter.get(
   VocabularyController.getAll
 );
 
+VocabularyRouter.get(
+  "/get-one/:id",
+  VocabularyValidator.delete(),
+  expressValidatorMiddleware,
+  VocabularyController.getOne
+);
+
 VocabularyRouter.delete(
   "/delete/:id",
   authMiddleware,

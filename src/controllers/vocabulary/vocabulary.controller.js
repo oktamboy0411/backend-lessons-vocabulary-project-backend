@@ -89,6 +89,17 @@ class VocabularyController {
     });
   };
 
+  static getOne = async (req, res) => {
+    const { id } = req.params;
+    const vocabulary = await VocabularyModel.findById(id);
+
+    if (!vocabulary) {
+      throw new HttpException(StatusCodes.NOT_FOUND, "Vocabulary not found!");
+    }
+
+    res.status(StatusCodes.OK).json({ success: true, data: vocabulary });
+  };
+
   static delete = async (req, res) => {
     const { id } = req.params;
 
