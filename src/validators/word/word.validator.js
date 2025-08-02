@@ -34,10 +34,6 @@ class WordValidator {
       .isInt({ min: 1 }),
   ];
 
-  static getOne = () => [
-    param("id", "ID must be a valid MongoDB ObjectId.").isMongoId(),
-  ];
-
   static delete = () => [
     param("id", "ID must be a valid MongoDB ObjectId.").isMongoId(),
   ];

@@ -89,6 +89,17 @@ class SectionController {
     });
   };
 
+  static getOne = async (req, res) => {
+    const { id } = req.params;
+    const section = await SectionModel.findById(id);
+
+    if (!section) {
+      throw new HttpException(StatusCodes.NOT_FOUND, "Section not found!");
+    }
+
+    res.status(StatusCodes.OK).json({ success: true, data: section });
+  };
+
   static delete = async (req, res) => {
     const { id } = req.params;
 

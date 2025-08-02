@@ -28,6 +28,13 @@ SectionRouter.get(
   SectionController.getAll
 );
 
+SectionRouter.get(
+  "/get-one/:id",
+  SectionValidator.delete(),
+  expressValidatorMiddleware,
+  SectionController.getOne
+);
+
 SectionRouter.delete(
   "/delete/:id",
   authMiddleware,

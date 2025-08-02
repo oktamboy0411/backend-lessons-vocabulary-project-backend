@@ -28,6 +28,13 @@ CategoryRouter.get(
   CategoryController.getAll
 );
 
+CategoryRouter.get(
+  "/get-one/:id",
+  CategoryValidator.delete(),
+  expressValidatorMiddleware,
+  CategoryController.getOne
+);
+
 CategoryRouter.delete(
   "/delete/:id",
   authMiddleware,

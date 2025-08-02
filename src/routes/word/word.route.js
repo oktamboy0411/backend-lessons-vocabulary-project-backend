@@ -25,8 +25,8 @@ WordRouter.get(
 );
 
 WordRouter.get(
-  "/get/:id",
-  WordValidator.getOne(),
+  "/get-one/:id",
+  WordValidator.delete(),
   expressValidatorMiddleware,
   WordController.getOne
 );

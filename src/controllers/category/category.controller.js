@@ -88,6 +88,17 @@ class CategoryController {
     });
   };
 
+  static getOne = async (req, res) => {
+    const { id } = req.params;
+    const category = await CategoryModel.findById(id);
+
+    if (!category) {
+      throw new HttpException(StatusCodes.NOT_FOUND, "Category not found!");
+    }
+
+    res.status(StatusCodes.OK).json({ success: true, data: category });
+  };
+
   static delete = async (req, res) => {
     const { id } = req.params;
 
