@@ -7,12 +7,15 @@ const {
   CategoryValidator,
 } = require("../../validators/category/category.validator.js");
 const { authMiddleware } = require("../../middlewares/auth/auth.middleware.js");
+const { roleMiddleware } = require("../../middlewares/role/role.middleware.js");
+const { RoleConstants } = require("../../utils/constants/constants.js");
 
 const CategoryRouter = Router();
 
 CategoryRouter.post(
   "/create",
   authMiddleware,
+  roleMiddleware([RoleConstants.ADMIN, RoleConstants.CEO]),
   CategoryValidator.create(),
   expressValidatorMiddleware,
   CategoryController.create
@@ -28,6 +31,7 @@ CategoryRouter.get(
 CategoryRouter.delete(
   "/delete/:id",
   authMiddleware,
+  roleMiddleware([RoleConstants.ADMIN, RoleConstants.CEO]),
   CategoryValidator.delete(),
   expressValidatorMiddleware,
   CategoryController.delete
@@ -36,6 +40,7 @@ CategoryRouter.delete(
 CategoryRouter.put(
   "/update/:id",
   authMiddleware,
+  roleMiddleware([RoleConstants.ADMIN, RoleConstants.CEO]),
   CategoryValidator.update(),
   expressValidatorMiddleware,
   CategoryController.update

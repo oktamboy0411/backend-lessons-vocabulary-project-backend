@@ -5,7 +5,7 @@ const { asyncHandler } = require("../../utils/asyncHandler/asyncHandler.js");
 const authMiddleware = asyncHandler((req, res, next) => {
   const token = req.headers?.authorization?.split(" ")[1];
   const decoded = verify(token, JWT_SECRET);
-  req.user = decoded;
+  req.admin = decoded;
   next();
 });
 

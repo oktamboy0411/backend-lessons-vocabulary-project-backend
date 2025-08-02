@@ -11,7 +11,7 @@ const documentSchema = new Schema(
     password: { type: String, required: true },
     role: {
       type: String,
-      enum: [RoleConstants.CEO, RoleConstants.ADMIN, RoleConstants.USER],
+      enum: [RoleConstants.CEO, RoleConstants.ADMIN],
       default: RoleConstants.ADMIN,
     },
   },

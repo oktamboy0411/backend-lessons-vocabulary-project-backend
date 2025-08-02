@@ -15,7 +15,6 @@ class VocabularyTypes {
 class RoleConstants {
   static CEO = "CEO";
   static ADMIN = "admin";
-  static USER = "user";
 }
 
 module.exports = {
