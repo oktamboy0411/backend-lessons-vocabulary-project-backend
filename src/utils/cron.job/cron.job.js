@@ -3,7 +3,7 @@ const {
   UploadController,
 } = require("../../controllers/upload/upload.controller.js");
 
-cron.schedule("27 10 * * *", async () => {
+cron.schedule("00 17 * * *", async () => {
   const deletedCount = await UploadController.deleteFilesWithCron();
   console.log(`Deleted ${deletedCount} old files`);
 });
